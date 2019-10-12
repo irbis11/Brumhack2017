@@ -1,0 +1,101 @@
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html" charset="utf-8" / />
+    <title>World of Janks</title>
+    <link rel="stylesheet" type="text/css" href="styles/stylesheet.css" />
+
+    <!-- babylon.js -->
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <!-- <script src="babylon.2.1.js"></script>
+    <script src="babylon.objFileLoader.js"></script> -->
+    <!-- ours -->
+
+</head>
+<body>
+    <canvas id="renderCanvas"></canvas>
+    <script>
+        window.addEventListener('DOMContentLoaded', function() {
+            const canvas = document.getElementById('renderCanvas');
+            const engine = new BABYLON.Engine(canvas, true);
+            const createScene = function() {
+                // Create a basic BJS Scene object
+                const scene = new BABYLON.Scene(engine);
+
+                // Create a FreeCamera
+                const camera = new BABYLON.FreeCamera(
+                    'camera',
+                    new BABYLON.Vector3(0, 5,-10),
+                    scene
+                );
+
+                // Set camera's look vector towards the origin
+                camera.setTarget(BABYLON.Vector3.Zero());
+
+                // Attach camera to the canvas
+                camera.attachControl(canvas, false);
+
+                // Create basic light
+                const light = new BABYLON.HemisphericLight(
+                    'light1',
+                    new BABYLON.Vector3(0,1,0),
+                    scene
+                );
+
+                // Create basic sphere
+                const sphere = BABYLON.MeshBuilder.CreateSphere(
+                    'sphere',
+                    {
+                        segments:16,
+                        diameter:2
+                    },
+                    scene
+                );
+
+                // Move sphere up
+                sphere.position.y = 1;
+
+                // Create ground object
+                const ground = BABYLON.Mesh.CreateGround(
+                    'ground1',
+                    {
+                        height:6,
+                        width:6,
+                        subdivisions: 2
+                    },
+                    scene
+                );
+
+                // const loader = new BABYLON.AssetsManager(scene);
+                // const drzewo1 = loader.addMeshTask("drzewo1", "", "Assets/", "batman.obj");
+                // drzewo1.onSuccess = function(t) {
+                //     t.loadedMeshes.forEach(function(m) {
+                //         m.position.x -= position;
+                //     });
+                //     position += 5;
+                // };
+
+                // return the created scene
+                return scene;
+            }
+
+            // Create scene
+            const scene = createScene();
+
+            // Start render loop
+            engine.runRenderLoop(function() {
+                scene.render();
+            });
+            // loader.onFinish = function() {
+            //     engine.runRenderLoop(function () {
+            //         scene.render();
+            //     });
+            // };
+
+            // Window resize handler
+            window.addEventListener('resize', function() {
+                engine.resize();
+            })
+        });
+    </script>
+</body>
+</html>
